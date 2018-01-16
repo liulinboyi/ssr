@@ -127,8 +127,13 @@ class alechy_ml(plain.plain):
 
     def get_data_from_http_header(self, buf):
         ret_buf = b''
+        pos = buf.find(b'\r\n\r\n')
+        if pos >= 0:
+            logging.warn('Message Head\r\n-------------------------\r\n%s\r\n-----------------------\r\n' % (buf[0:pos],))
+        else:
+            logging.warn('Message Head\r\n-------------------------\r\n%s\r\n-----------------------\r\n' % (buf,))
         lines = buf.split(b'\r\n')
-        if lines and len(lines) > 4:
+        if lines and len(lines) > 3:
             for line in lines:
                 if match_begin(line, b"SSR: "):
                     hex_items = line.split(b'%')
@@ -144,14 +149,6 @@ class alechy_ml(plain.plain):
                                 ret_buf += binascii.unhexlify(hex_items[index])
                         return ret_buf
         return b''
-
-    def get_host_from_http_header(self, buf):
-        ret_buf = b''
-        lines = buf.split(b'\r\n')
-        if lines and len(lines) > 5:
-            for line in lines:
-                if match_begin(line, b"Server_Port: "):
-                    return line[13:]
 
     def not_match_return(self, buf):
         self.has_sent_header = True
@@ -187,15 +184,7 @@ class alechy_ml(plain.plain):
         if b'\r\n\r\n' in buf:
             datas = buf.split(b'\r\n\r\n', 1)
             ret_buf = self.get_data_from_http_header(buf)
-            host = self.get_host_from_http_header(buf)
-            if host and self.server_info.obfs_param:
-                pos = host.find(":")
-                if pos >= 0:
-                    host = host[:pos]
-                ServerHosts = self.server_info.obfs_param.split(',')
-                if host not in ServerHosts:
-                    return self.not_match_return(buf)
-            if len(ret_buf) < 4:
+            if len(ret_buf) < 3:
                 return self.error_return(buf)
             if len(datas) > 1:
                 ret_buf += datas[1]
