@@ -2,6 +2,7 @@ ShadowsocksR
 ===========
 
 A fast tunnel proxy that helps you bypass firewalls.
+QQ 群: 261167945
 
 Server
 ------
