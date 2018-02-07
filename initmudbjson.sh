@@ -2,7 +2,7 @@
 
 bash initcfg.sh
 
-#sed -i "s/API_INTERFACE = .\+\?\#/API_INTERFACE = \'mudbjson\' \#/g" userapiconfig.py
+sed -i "s/API_INTERFACE = .\+\?\#/API_INTERFACE = \'mudbjson\' \#/g" userapiconfig.py
 #ip_addr=`ifconfig -a|grep inet|grep -v inet6|grep -v "127.0.0."|grep -v -e "192\.168\..[0-9]\+\.[0-9]\+"|grep -v -e "10\.[0-9]\+\.[0-9]\+\.[0-9]\+"|awk '{print $2}'|tr -d "addr:"`
 #ip_count=`echo $ip_addr|grep -e "^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+$" -c`
 
